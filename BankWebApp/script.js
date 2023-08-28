@@ -20,6 +20,9 @@ const operationTabContainer = document.querySelector(
 const operationTab = document.querySelectorAll(".operations__tab");
 const operationContent = document.querySelectorAll(".operations__content");
 
+const nav = document.querySelector(".nav");
+
+
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove("hidden");
@@ -74,13 +77,15 @@ navLinks.addEventListener("click", function (e) {
 operationTabContainer.addEventListener("click", function (e) {
   e.preventDefault();
   const clicked = e.target.closest(".operations__tab");
-  console.log(clicked,'clickedclicked')
-  if (!clicked) return;
+  console.log(clicked, 'clickedclicked')
+  if (!clicked) {
+    return;
+  }
 
   operationTab.forEach((el) => {
     el.classList.remove("operations__tab--active");
   });
-  
+
   operationContent.forEach((el) => {
     el.classList.remove("operations__content--active");
   });
@@ -91,3 +96,26 @@ operationTabContainer.addEventListener("click", function (e) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add("operations__content--active");
 });
+
+
+const navlinksHandleHover = function (e) {
+  console.log("eeeeeeeeeeeeeeeeeeeee",e)
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link')
+    const logo = link.closest('.nav').querySelector('img')
+
+    siblings.forEach((el) => {
+      if (el !== link) {
+        el.style.opacity = this
+      }
+
+    })
+    logo.style.opacity = this
+
+  }
+}
+
+// passing "argument" to handler function
+nav.addEventListener("mouseover", navlinksHandleHover.bind(0.5))
+nav.addEventListener("mouseout", navlinksHandleHover.bind(1))
