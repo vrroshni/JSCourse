@@ -145,8 +145,6 @@ const makeItSicky = (entries) => {
     nav.classList.add('sticky')
   else
     nav.classList.remove('sticky')
-
-
 }
 
 const header = document.querySelector(".header")
@@ -158,3 +156,21 @@ const stickyNav = new IntersectionObserver(makeItSicky, {
 })
 
 stickyNav.observe(header)
+
+const allSections = document.querySelectorAll('.section')
+const secObserver = (entries, observer) => {
+  const [entry] = entries
+  if (!entry.isIntersecting) return
+  entry.target.classList.remove('section--hidden')
+  observer.unobserve(entry.target)
+}
+
+const sectionObserver = new IntersectionObserver(secObserver, {
+  root: null,
+  threshold: .15
+})
+
+allSections.forEach((section) => {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden')
+})
