@@ -98,8 +98,9 @@ operationTabContainer.addEventListener("click", function (e) {
 });
 
 
+
+// hover on navlinks
 const navlinksHandleHover = function (e) {
-  console.log("eeeeeeeeeeeeeeeeeeeee",e)
   if (e.target.classList.contains('nav__link')) {
     const link = e.target
     const siblings = link.closest('.nav').querySelectorAll('.nav__link')
@@ -119,3 +120,41 @@ const navlinksHandleHover = function (e) {
 // passing "argument" to handler function
 nav.addEventListener("mouseover", navlinksHandleHover.bind(0.5))
 nav.addEventListener("mouseout", navlinksHandleHover.bind(1))
+
+
+//not optimal way
+// const cords = section1.getBoundingClientRect()
+
+
+// window.addEventListener('scroll', function () {
+//   if (window.scrollY > cords.top){
+//    nav.classList.add('sticky') 
+//   }else{
+//     nav.classList.remove('sticky')
+
+//   }
+// })
+
+
+const navHeight = nav.getBoundingClientRect().height
+
+
+const makeItSicky = (entries) => {
+  const [entry] = entries
+  if (!entry.isIntersecting)
+    nav.classList.add('sticky')
+  else
+    nav.classList.remove('sticky')
+
+
+}
+
+const header = document.querySelector(".header")
+//show sticky when header part is gone
+const stickyNav = new IntersectionObserver(makeItSicky, {
+  root: null,
+  threshold: 0,//percentege to show
+  rootMargin: `${navHeight}px` //distance from the top of viewport, in px
+})
+
+stickyNav.observe(header)
