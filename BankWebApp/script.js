@@ -176,6 +176,8 @@ allSections.forEach((section) => {
 })
 
 
+
+
 //lazy load images
 const allLazyImages = document.querySelectorAll('img[data-src]')
 
@@ -183,8 +185,9 @@ const lazyLoadImage = (entries, observer) => {
   const [entry] = entries
 
 
-  if (!entry.isIntersecting) return;
-console.log(entry.target.src)
+  if (!entry.isIntersecting) {
+    return;
+  }
 
   entry.target.src = entry.target.dataset.src
 
@@ -199,6 +202,7 @@ console.log(entry.target.src)
 
 
 const observeImage = new IntersectionObserver(lazyLoadImage, {
+
   root: null,
   threshold: 0,
   rootMargin: '-200px'
@@ -206,3 +210,85 @@ const observeImage = new IntersectionObserver(lazyLoadImage, {
 })
 
 allLazyImages.forEach((img) => observeImage.observe(img))
+
+
+
+//building slider component
+const slider = document.querySelector('.slider')
+const sliderBtnLeft = document.querySelector('.slider__btn--left')
+const sliderBtnRight = document.querySelector('.slider__btn--right')
+const allSlides = document.querySelectorAll('.slide')
+const dotContainer = document.querySelector('.dots')
+
+
+let currentSlide = 0
+
+const createDotsSlider = () => {
+  allSlides.forEach((_, i) => {
+    dotContainer.insertAdjacentHTML('beforeend', `<button class="dots__dot" data-slide='${i}'></button>`)
+  })
+}
+const showSlide = (slide) => {
+  allSlides.forEach((s, i) => {
+    s.style.transform = `translate(${(i - slide) * 100}%)`
+
+  })
+}
+
+const activateDots = (slide) => {
+  document.querySelectorAll('.dots__dot').forEach((dots) => {
+    dots.classList.remove('dots__dot--active')
+  })
+  console.log(document.querySelector(`.dots__dot[data-slide='${slide}']`))
+  document.querySelector(`.dots__dot[data-slide='${slide}']`).classList.add('dots__dot--active')
+}
+
+dotContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains('dots__dot')) {
+    const { slide } = e.target.dataset
+    activateDots(slide)
+    showSlide(slide)
+  }
+
+})
+
+const nextSlide = () => {
+
+  if (currentSlide === allSlides.length - 1) {
+    currentSlide = 0
+  } else {
+    currentSlide++
+  }
+
+  showSlide(currentSlide)
+  activateDots(currentSlide)
+
+}
+
+const prevSlide = () => {
+
+  if (currentSlide === 0) {
+    currentSlide = allSlides.length - 1
+  } else {
+    currentSlide--
+  }
+
+  showSlide(currentSlide)
+  activateDots(currentSlide)
+
+
+}
+
+showSlide(currentSlide)
+createDotsSlider()
+activateDots(currentSlide)
+
+sliderBtnLeft.addEventListener("click", prevSlide)
+sliderBtnRight.addEventListener("click", nextSlide)
+document.addEventListener("keydown", function (e) {
+  e.preventDefault()
+  console.log(e)
+  e.key == 'ArrowLeft' && prevSlide()
+  e.key == 'ArrowRight' && nextSlide()
+})
+
