@@ -26,7 +26,7 @@ const account1 = {
 };
 
 
-const accounts = [account1, account2];
+const accounts = [account1];
 
 // Elements
 const labelWelcome = document.querySelector(".welcome");
@@ -72,11 +72,14 @@ let isSorted = false;
 
 const createUsername = (accounts) => {
   accounts.forEach(function (account) {
+    // account.username = account.owner
+    //   .toLowerCase()
+    //   .split(" ")
+    //   .map((word) => word[0])
+    //   .join("");
     account.username = account.owner
       .toLowerCase()
-      .split(" ")
-      .map((word) => word[0])
-      .join("");
+      
   });
 };
 createUsername(accounts);
@@ -214,10 +217,16 @@ const DataDisplay = (account) => {
 
 const loginAccount = (e) => {
   e.preventDefault();
+  
   currentAccount = accounts.find(
-    (account) => account.username === inputLoginUsername.value
-  );
+    (account) => {
+      console.log(account)
+      console.log( inputLoginUsername.value,+inputLoginPin.value)
+      return account.username === inputLoginUsername.value
 
+    }
+  );
+console.log(currentAccount)
   if (currentAccount && currentAccount?.pin === +inputLoginPin.value) {
     if(timer){
       clearInterval(timer)
